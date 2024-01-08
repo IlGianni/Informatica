@@ -39,12 +39,23 @@ INNER JOIN Dettagli_Ordini ON Dettagli_Ordini.ID_Ordine = Ordini.ID_Ordine
 INNER JOIN Libri ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
 WHERE Anno_Pubblicazione < 1850)
 
--- 7] Trovare il titolo del libro più recente ordinato da ogni cliente-- 
+-- 7] Trovare il titolo del libro più recente ordinato da ogni cliente 
 SELECT Nome, Cognome, Titolo, Anno_Pubblicazione FROM Clienti
 INNER JOIN Ordini ON Ordini.ID_Cliente = Clienti.ID_Cliente
 INNER JOIN Dettagli_Ordini ON Dettagli_Ordini.ID_Ordine = Ordini.ID_Ordine
 INNER JOIN Libri ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
 WHERE Ordini.Data_Ordine IN (
     SELECT MAX(Data_Ordine) FROM Ordini
+    GROUP BY ID_Cliente
+)
+
+SELECT Nome, Cognome, Titolo, Anno_Pubblicazione FROM Clienti
+INNER JOIN Ordini ON Ordini.ID_Cliente = Clienti.ID_Cliente
+INNER JOIN Dettagli_Ordini ON Dettagli_Ordini.ID_Ordine = Ordini.ID_Ordine
+INNER JOIN Libri ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
+WHERE Libri.Anno_Pubblicazione IN (
+    SELECT MAX(Anno_Pubblicazione) FROM Libri
+    INNER JOIN Dettagli_Ordini ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
+    INNER JOIN Ordini ON Ordini.ID_Ordine = Dettagli_Ordini.ID_Ordine
     GROUP BY ID_Cliente
 )
