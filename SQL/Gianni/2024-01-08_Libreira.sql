@@ -27,6 +27,10 @@ WHERE ID_Cliente IN (SELECT ID_Cliente FROM Ordini
 INNER JOIN Dettagli_Ordini ON Dettagli_Ordini.ID_Ordine = Ordini.ID_Ordine
 INNER JOIN Libri ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
 WHERE Anno_Pubblicazione > 1850)
+AND ID_Cliente NOT IN (SELECT ID_Cliente FROM Ordini
+INNER JOIN Dettagli_Ordini ON Dettagli_Ordini.ID_Ordine = Ordini.ID_Ordine
+INNER JOIN Libri ON Libri.ID_Libro = Dettagli_Ordini.ID_Libro
+WHERE Anno_Pubblicazione < 1850)
 
 -- 6] Identificare i clienti che non hanno mai ordinato un libro pubblicato prima del 1850
 SELECT Nome, Cognome FROM Clienti
